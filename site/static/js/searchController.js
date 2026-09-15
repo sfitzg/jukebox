@@ -1,0 +1,178 @@
+function populateListElement(document, element, strings) {
+    element.replaceChildren();
+    for (const s of strings) {
+        const item = document.createElement('li');
+        item.textContent = s;
+        element.appendChild(item);
+    }
+}
+
+function makeResultLI(document, r) {
+    const item = document.createElement('li');
+    item.className = 'search-result';
+    item.dataset.id = r.id;
+    item.dataset.title = r.title;
+    item.dataset.channel = r.channel;
+    item.dataset.duration = r.duration;
+
+    // video id determines the url for the thumbnail
+    const thumb = document.createElement('img');
+    thumb.className = 'results-thumbnail';
+    thumb.src = `https://i.ytimg.com/vi/${r.id}/hqdefault.jpg`;
+    thumb.alt = '';
+
+    const title = document.createElement('div');
+    title.className = 'results-title is-size-5';
+    title.textContent = r.title;
+
+    const channel = document.createElement('div');
+    channel.className = 'results-channel is-size-7';
+    channel.textContent = r.channel;
+
+    const duration = document.createElement('div');
+    duration.className = 'results-duration is-size-4';
+    duration.textContent = r.duration;
+
+    const text = document.createElement('div');
+    text.className = 'results-text';
+    text.append(title, channel);
+
+    const info = document.createElement('div');
+    info.className = 'results-info';
+    info.append(text, duration);
+
+    item.append(thumb, info);
+    return item;
+}
+
+function makeQueueLI(document, r) {
+    const item = document.createElement('li');
+    item.className = 'queue-item';
+    item.dataset.id = r.video_id;
+    item.dataset.title = r.title;
+    item.dataset.channel = r.channel;
+    item.dataset.duration = r.duration;
+
+    // video id determines the url for the thumbnail
+    const thumb = document.createElement('img');
+    thumb.className = 'queue-thumbnail';
+    thumb.src = `https://i.ytimg.com/vi/${r.video_id}/hqdefault.jpg`;
+    thumb.alt = '';
+
+    const title = document.createElement('div');
+    title.className = 'queue-title is-size-5';
+    title.textContent = r.title;
+
+    const channel = document.createElement('div');
+    channel.className = 'queue-channel is-size-7';
+    channel.textContent = r.channel;
+
+    const duration = document.createElement('div');
+    duration.className = 'queue-duration is-size-4';
+    duration.textContent = r.duration;
+
+    const text = document.createElement('div');
+    text.className = 'queue-text';
+    text.append(title, channel);
+
+    item.append(thumb, text, duration);
+    return item;
+}
+
+class SearchController {
+
+    constructor(document, service) {
+
+        this.document = document;
+        this.service = service;
+        this.autocompleteRequestId = 0;
+        this.searchRequestId = 0;
+
+        this.searchBox = document.getElementById('yt-search');
+        this.searchForm = document.getElementById('search-form');
+        this.suggestionList = document.getElementById('suggestions');
+        this.resultList = document.getElementById('results');
+        this.queueList = document.getElementById('queue');
+
+        this.nowPlayingContainer = document.getElementById('now-playing')
+        this.nowPlayingThumbnail = document.getElementById('now-playing-thumbnail')
+        this.nowPlayingTitle = document.getElementById('now-playing-title')
+        this.nowPlayingChannel = document.getElementById('now-playing-channel')
+        this.nowPlayingDuration = document.getElementById('now-playing-duration')
+
+        service.listen((data) => {
+            this.queueList.replaceChildren();
+            for (const entry of data.queued) {
+                const item = makeQueueLI(document, entry)
+                this.queueList.appendChild(item);
+            }
+            if (data.now_playing) {
+                this.nowPlayingThumbnail.src = `https://i.ytimg.com/vi/${data.now_playing.video_id}/hqdefault.jpg`;
+                this.nowPlayingTitle.textContent = data.now_playing.title;
+                this.nowPlayingChannel.textContent = data.now_playing.channel;
+                this.nowPlayingDuration.textContent = data.now_playing.duration;
+                this.nowPlayingContainer.hidden = false;
+            }
+            else {
+                this.nowPlayingContainer.hidden = true;
+            }
+        });
+
+        this.searchBox.addEventListener('input', async (event) => {
+            const id = ++this.autocompleteRequestId;
+            const input = event.target.value;
+            if (input.trim() == '') {
+                this.suggestionList.replaceChildren();
+                return;
+            }
+            const results = await service.autocomplete(input);
+
+            if (id == this.autocompleteRequestId) {
+                populateListElement(document, this.suggestionList, results);
+            }
+        });
+
+        this.searchForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            await this.doSearch();
+        });
+
+        this.suggestionList.addEventListener('click', async (event)  => {
+            const item = event.target.closest('li');
+            if (!item) return;
+            this.searchBox.value = item.textContent;
+            await this.doSearch();
+        });
+
+        this.resultList.addEventListener('click', async (event)  => {
+            const item = event.target.closest('li');
+            if (!item) return;
+            await service.enqueue(item.dataset.id, item.dataset.title,
+                    item.dataset.channel, item.dataset.duration);
+        });
+    }
+
+    async doSearch() {
+        this.suggestionList.replaceChildren();
+        const input = this.searchBox.value;
+
+        if (input.trim() == '') {
+            return;
+        }
+        const id = ++this.searchRequestId;
+        const results = await this.service.search(input);
+
+        if (id != this.searchRequestId) {
+            return;
+        }
+        this.resultList.replaceChildren();
+
+        for (const r of results) {
+            const item = makeResultLI(this.document, r);
+            this.resultList.appendChild(item);
+        }
+    }
+
+}
+
+export default SearchController;

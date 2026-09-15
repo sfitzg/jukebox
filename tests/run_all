@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+THIS_DIR="$(dirname "$(realpath "$0")")"
+cd "$THIS_DIR"
+node --test
+PYTHONPATH="$THIS_DIR/../site" pytest -s

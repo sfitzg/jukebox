@@ -1,0 +1,46 @@
+const events = new EventSource('/events');
+
+// TODO change name if it is to handle other things
+class SearchService {
+    autocomplete(input) {
+        // Forward to flask endpoint
+        return fetch('/autocomplete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({query: input}),
+        }).then(response => response.json());
+    }
+
+    search(input) {
+        // Forward to flask endpoint
+        return fetch('/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({query: input}),
+        }).then(response => response.json());
+    }
+
+    enqueue(id, title, channel, duration) {
+        // Forward to flask endpoint
+        return fetch('/queue', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id, title, channel, duration}),
+        }).then(response => response.json());
+    }
+
+    listen(handler) {
+        events.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            handler(data);
+        };
+    }
+}
+
+export default SearchService;

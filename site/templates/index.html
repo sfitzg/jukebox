@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{{ url_for('static', filename='music.png') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bulma.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
+        <title>Jukebox</title>
+    </head>
+
+    <body>
+        <section class="section">
+        <div class="container">
+            <div class="tabs is-fullwidth">
+            <ul>
+                <li class="is-active"><a>Search</a></li>
+                <li><a>Queue</a></li>
+            </ul>
+            </div>
+            <div id="search-panel">
+                <div class="search-box">
+                    <h1 class="title is-size-4">Search</h1>
+                    <form id="search-form" class="field is-grouped">
+                        <div id="search-button-control" class="control">
+                            <button type="submit" id="do-search" class="button is-primary">
+                                &#x1F50D;
+                            </button>
+                        </div>
+                        <div class="control is-expanded">
+                            <input class="input" type="search" id="yt-search" placeholder="Search...">
+                        </div>
+                    </form>
+                    <ol id="suggestions" class="autocomplete-list content is-medium has-background-white"></ol>
+                </div>
+                <ol id="results" class="search-results-list content is-medium"></ol>
+            </div>
+            <div id="queue-panel" hidden>
+                <h1 class="title is-size-4">Now Playing</h1>
+                <div id="now-playing" class"now-playing" hidden>
+                    <img id="now-playing-thumbnail" class="now-playing-thumbnail" alt="">
+                    <div class="now-playing-info">
+                        <div class="now-playing-text">
+                            <div id="now-playing-title" class="now-playing-title is-size-5">
+                            </div>
+                            <div id="now-playing-channel" class="now-playing-channel is-size-7">
+                            </div>
+                        </div>
+                        <div id="now-playing-duration" class="now-playing-duration is-size-4">
+                        </div>
+                    </div>
+                </div>
+                <h1 class="title is-size-4">Queue</h1>
+                <ol id="queue" class="queue-list content is-medium"></ol>
+            </div>
+        </div>
+        </section>
+    </body>
+</html>
