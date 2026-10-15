@@ -49,7 +49,7 @@ class Downloader:
             except DownloadError as e:
                 print(f'*** {video_id} failed')
                 print(e)
-                self.q_notify_download_failed(video_id)
+                self.q.notify_download_failed(video_id)
 
 
 if __name__ == '__main__':
