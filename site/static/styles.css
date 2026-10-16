@@ -132,6 +132,23 @@
     margin-left: auto;
 }
 
+#pause,
+#skip,
+#volume-down,
+#volume-up {
+    height: 2em;
+    width: 2em;
+    font-size: 1.5rem;
+    padding: 0 0.5em;
+}
+
+#volume-down img,
+#volume-up img {
+    width: 1.5em;
+    height: 1.5em;
+    display: block;
+}
+
 @media (max-width: 768px) {
     .section {
         padding-top: 1rem;

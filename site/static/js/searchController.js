@@ -99,14 +99,16 @@ class SearchController {
         this.resultList = document.getElementById('results');
         this.queueList = document.getElementById('queue');
 
-        this.nowPlayingContainer = document.getElementById('now-playing')
-        this.nowPlayingThumbnail = document.getElementById('now-playing-thumbnail')
-        this.nowPlayingTitle = document.getElementById('now-playing-title')
-        this.nowPlayingChannel = document.getElementById('now-playing-channel')
-        this.nowPlayingDuration = document.getElementById('now-playing-duration')
+        this.nowPlayingContainer = document.getElementById('now-playing');
+        this.nowPlayingThumbnail = document.getElementById('now-playing-thumbnail');
+        this.nowPlayingTitle = document.getElementById('now-playing-title');
+        this.nowPlayingChannel = document.getElementById('now-playing-channel');
+        this.nowPlayingDuration = document.getElementById('now-playing-duration');
 
-        this.pauseResumeButton = document.getElementById('pause')
-        this.skipButton = document.getElementById('skip')
+        this.pauseResumeButton = document.getElementById('pause');
+        this.skipButton = document.getElementById('skip');
+        this.volumeDownButton = document.getElementById('volume-down');
+        this.volumeUpButton = document.getElementById('volume-up');
 
         service.listen((data) => {
             this.queueList.replaceChildren();
@@ -171,6 +173,14 @@ class SearchController {
 
         this.skipButton.addEventListener('click', (event)  => {
             service.skip();
+        });
+
+        this.volumeDownButton.addEventListener('click', (event)  => {
+            service.volume(-5);
+        });
+
+        this.volumeUpButton.addEventListener('click', (event)  => {
+            service.volume(5);
         });
     }
 

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="{{ url_for('static', filename='music.png') }}">
+        <link rel="icon" href="{{ url_for('static', filename='icons/music.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='bulma.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <script type="module" src="{{ url_for('static', filename='js/app.js') }}"></script>
@@ -51,6 +51,12 @@
                     <div class="buttons">
                         <button id="pause" class="button is-primary">&#x23EF;</button>
                         <button id="skip" class="button is-danger">&#x23ED;</button>
+                        <button id="volume-down" class="button is-primary">
+                            <img src="{{ url_for('static', filename='icons/volume-down-fill.svg') }}">
+                        </button>
+                        <button id="volume-up" class="button is-primary">
+                            <img src="{{ url_for('static', filename='icons/volume-up-fill.svg') }}">
+                        </button>
                     </div>
                 </div>
                 <ol id="queue" class="queue-list content is-medium"></ol>

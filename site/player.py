@@ -15,9 +15,11 @@ class Player:
         self.event_manager = self.player.event_manager()
         self.event_manager.event_attach(vlc.EventType.MediaPlayerEndReached, self._on_end)
         self.event_manager.event_attach(vlc.EventType.MediaPlayerEncounteredError, self._on_error)
-        self.first_one = True
         self.error = False
         self.done = threading.Event()
+        self.volume_lock = threading.Lock() # protect self.first_one, self.volume
+        self.first_one = True
+        self.volume = 50
 
     def start(self):
         self.worker.start()
@@ -47,11 +49,12 @@ class Player:
         self.player.play()
 
         # Work around segfault if we set volume too soon
-        if self.first_one:
-            time.sleep(0.1)
-            self.first_one = False
+        with self.volume_lock:
+            if self.first_one:
+                time.sleep(0.1)
+                self.first_one = False
+            self.player.audio_set_volume(self.volume)
 
-        self.player.audio_set_volume(50)
         self.done.wait()
         self.done.clear()
         if self.error:
@@ -59,11 +62,16 @@ class Player:
         else:
             print('success')
 
+    def adjust_volume(self, delta):
+        with self.volume_lock:
+            self.volume = max(0, min(100, self.volume + delta))
+            if self.first_one:
+                return # not safe yet
+            self.player.audio_set_volume(self.volume)
+
     def run(self):
         while True:
             mp3 = self.q.get_next_to_play()
             print(f'### playing {mp3}')
             self._play(mp3)
             print(f'### {mp3} play done')
-
-

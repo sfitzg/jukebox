@@ -67,6 +67,13 @@ def skip():
     pl.skip()
     return {'status': 'ok'}
 
+@app.route('/volume', methods=['POST'])
+def volume():
+    data = request.json
+    delta = data['delta']
+    pl.adjust_volume(int(delta))
+    return {'status': 'ok'}
+
 @app.get('/events')
 def events():
     def generate():
