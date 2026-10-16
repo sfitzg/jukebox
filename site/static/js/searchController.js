@@ -33,13 +33,18 @@ function makeResultLI(document, r) {
     duration.className = 'results-duration is-size-4';
     duration.textContent = r.duration;
 
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.textContent = '\u25B6';
+    play.className = 'results-play-button button is-primary';
+
     const text = document.createElement('div');
     text.className = 'results-text';
     text.append(title, channel);
 
     const info = document.createElement('div');
     info.className = 'results-info';
-    info.append(text, duration);
+    info.append(text, duration, play);
 
     item.append(thumb, info);
     return item;
@@ -148,6 +153,7 @@ class SearchController {
         });
 
         this.resultList.addEventListener('click', async (event)  => {
+            if (!event.target.closest('.results-play-button')) return;
             const item = event.target.closest('li');
             if (!item) return;
             await service.enqueue(item.dataset.id, item.dataset.title,
