@@ -112,10 +112,10 @@ class Queue:
         while True:
             with self.changed:
                 item = self._pop_first_item_matching(lambda item: item.path is not None)
+                self.now_playing = item
                 self._check_invariant()
+                self._broadcast()
                 if item:
-                    self.now_playing = item
-                    self._broadcast()
                     return item.path
                 self.changed.wait()
 
