@@ -22,34 +22,3 @@ import SearchController from './searchController.js';
 
 const searchService = new SearchService();
 const searchController = new SearchController(document, searchService);
-
-// Set up events - TODO: service/controller/unit test
-//const events = new EventSource('/events');
-
-/*
-events.addEventListener('queue-changed', (event) => {
-    console.log('EVENT', event.data);
-    const data = JSON.parse(event.data);
-    console.log(data);
-});
-*/
-/*
-console.log('CREATING SSE');
-
-events.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log(data);
-};
-
-events.onopen = () => {
-    console.log('SSE OPEN');
-};
-
-events.onerror = (event) => {
-    console.log('SSE ERROR', event);
-};
-
-events.onmessage = (event) => {
-    console.log('SSE MESSAGE', event.data);
-};
-*/
