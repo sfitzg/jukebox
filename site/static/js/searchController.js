@@ -156,6 +156,11 @@ class SearchController {
             if (!event.target.closest('.results-play-button')) return;
             const item = event.target.closest('li');
             if (!item) return;
+
+            this.suggestionList.replaceChildren();
+            this.resultList.replaceChildren();
+            this.searchBox.value = '';
+
             await service.enqueue(item.dataset.id, item.dataset.title,
                     item.dataset.channel, item.dataset.duration);
         });
