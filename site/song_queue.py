@@ -91,6 +91,8 @@ class Queue:
                 # mark and move to end
                 item.failed = True
                 self.items.append(item)
+                self._broadcast()
+                self.changed.notify_all()
 
     # keeps item on queue.
     def get_next_to_download(self):
