@@ -130,6 +130,10 @@
 }
 
 @media (max-width: 768px) {
+    .section {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
     #search-button-control {
         display: none;
     }

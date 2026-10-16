@@ -13,7 +13,7 @@
     <body>
         <section class="section">
         <div class="container">
-            <div class="tabs is-fullwidth">
+            <div class="tabs is-medium is-boxed">
             <ul>
                 <li class="is-active"><a>Search</a></li>
                 <li><a>Queue</a></li>
@@ -21,7 +21,6 @@
             </div>
             <div id="search-panel">
                 <div class="search-box">
-                    <h1 class="title is-size-4">Search</h1>
                     <form id="search-form" class="field is-grouped">
                         <div id="search-button-control" class="control">
                             <button type="submit" id="do-search" class="button is-primary">
@@ -29,7 +28,7 @@
                             </button>
                         </div>
                         <div class="control is-expanded">
-                            <input class="input" type="search" id="yt-search" placeholder="Search...">
+                            <input class="input" type="search" autocomplete="off" id="yt-search" placeholder="Search...">
                         </div>
                     </form>
                     <ol id="suggestions" class="autocomplete-list content is-medium has-background-white"></ol>
@@ -37,7 +36,6 @@
                 <ol id="results" class="search-results-list content is-medium"></ol>
             </div>
             <div id="queue-panel" hidden>
-                <h1 class="title is-size-4">Now Playing</h1>
                 <div id="now-playing" class="now-playing" hidden>
                     <img id="now-playing-thumbnail" class="now-playing-thumbnail" alt="">
                     <div class="now-playing-info">
@@ -51,7 +49,6 @@
                         </div>
                     </div>
                 </div>
-                <h1 class="title is-size-4">Queue</h1>
                 <ol id="queue" class="queue-list content is-medium"></ol>
             </div>
         </div>
