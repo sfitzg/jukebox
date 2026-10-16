@@ -22,6 +22,16 @@ class Player:
     def start(self):
         self.worker.start()
 
+    def pause(self):
+        if self.player:
+            self.player.pause()
+
+    def skip(self):
+        if self.player:
+            self.player.stop()
+            self.error = False
+            self.done.set()
+
     def _on_end(self, event):
         self.error = False
         self.done.set()

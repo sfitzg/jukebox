@@ -1,4 +1,5 @@
 import os
+import json
 from queue import Queue
 from flask import Flask, render_template, request, Response
 
@@ -56,9 +57,16 @@ def enqueue():
     q.push_back(video_id, title, channel, duration)
     return {'status': 'ok'}
 
+@app.route('/pause', methods=['POST'])
+def pause():
+    pl.pause()
+    return {'status': 'ok'}
 
-import time
-import json
+@app.route('/skip', methods=['POST'])
+def skip():
+    pl.skip()
+    return {'status': 'ok'}
+
 @app.get('/events')
 def events():
     def generate():

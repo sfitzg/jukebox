@@ -100,6 +100,9 @@ class SearchController {
         this.nowPlayingChannel = document.getElementById('now-playing-channel')
         this.nowPlayingDuration = document.getElementById('now-playing-duration')
 
+        this.pauseResumeButton = document.getElementById('pause')
+        this.skipButton = document.getElementById('skip')
+
         service.listen((data) => {
             this.queueList.replaceChildren();
             for (const entry of data.queued) {
@@ -149,6 +152,14 @@ class SearchController {
             if (!item) return;
             await service.enqueue(item.dataset.id, item.dataset.title,
                     item.dataset.channel, item.dataset.duration);
+        });
+
+        this.pauseResumeButton.addEventListener('click', (event)  => {
+            service.pause();
+        });
+
+        this.skipButton.addEventListener('click', (event)  => {
+            service.skip();
         });
     }
 

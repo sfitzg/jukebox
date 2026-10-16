@@ -35,6 +35,20 @@ class SearchService {
         }).then(response => response.json());
     }
 
+    pause() {
+        // Forward to flask endpoint
+        return fetch('/pause', {
+            method: 'POST',
+        }).then(response => response.json());
+    }
+
+    skip() {
+        // Forward to flask endpoint
+        return fetch('/skip', {
+            method: 'POST',
+        }).then(response => response.json());
+    }
+
     listen(handler) {
         events.onmessage = (event) => {
             const data = JSON.parse(event.data);
