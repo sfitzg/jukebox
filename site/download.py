@@ -2,6 +2,8 @@
 import os
 import shutil
 import threading
+import subprocess
+
 import yt_dlp
 from yt_dlp.utils import DownloadError
 
@@ -12,19 +14,21 @@ def _download(output_dir, video_id):
         'js_runtimes': { 'node': {} },
         'format': 'bestaudio/best',
         'outtmpl': f'{output_dir}/audio.%(ext)s',
-        # convert to mp3
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        # normalize volume in same pass
-        'postprocessor_args': {
-            'extractaudio+ffmpeg': ['-af', 'loudnorm'],
-        },
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
+
+    input_path = os.path.join(output_dir, os.listdir(output_dir)[0])
+    output_path = os.path.join(output_dir, 'audio.mp3')
+
+    subprocess.run([
+        'ffmpeg-normalize', input_path,
+        '-f',
+        '-c:a', 'libmp3lame',
+        '-b:a', '192k',
+        '--keep-lra-above-loudness-range-target',
+        '-o', output_path,
+    ], check=True)
 
 
 class Downloader:
