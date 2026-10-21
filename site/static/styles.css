@@ -8,6 +8,14 @@
     position: relative
 }
 
+#do-search {
+    height: 2.5em;
+}
+
+#do-search img {
+    height: 1em;
+}
+
 .autocomplete-list {
     position: absolute;
     top: calc(100% + 4px);
