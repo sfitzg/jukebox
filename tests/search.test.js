@@ -172,11 +172,13 @@ test('search button', async () => {
 
     const id0 = '0xdeadbeef';
     const title0 = 'Walk On By - Dionne Warwick';
-    const duration0 = '2:34';
+    const duration0 = '34';
+    const duration_s0 = '0:34';
 
     const id1 = 'abc123'
     const title1 = 'Walk On By - The Stranglers';
-    const duration1 = '6:44';
+    const duration1 = '64';
+    const duration_s1 = '1:04';
 
     const searchResults = [
         { id: id0, title: title0, duration: duration0 },
@@ -193,8 +195,8 @@ test('search button', async () => {
 
     assert.deepStrictEqual(getIdDataEntries(resultList), [id0, id1]);
     assert.deepStrictEqual(getTitleAndDurationEntries(resultList), [
-        { title: title0, duration: duration0 },
-        { title: title1, duration: duration1 },
+        { title: title0, duration: duration_s0 },
+        { title: title1, duration: duration_s1 },
     ]);
 });
 
@@ -204,11 +206,13 @@ test('stale results ignored', async () => {
 
     const id0 = '0xdeadbeef';
     const title0 = 'Walk On By - Dionne Warwick';
-    const duration0 = '2:34';
+    const duration0 = '234';
+    const duration_s0 = '3:54';
 
     const id1 = 'abc123'
     const title1 = 'Walk On By - The Stranglers';
-    const duration1 = '6:44';
+    const duration1 = '644';
+    const duration_s1 = '10:44';
 
     const searchResults = [
         { id: id0, title: title0, duration: duration0 },
@@ -219,11 +223,13 @@ test('stale results ignored', async () => {
 
     const id0_a = 'qwert';
     const title0_a = 'Hurdy Gurdy Man - Donovan';
-    const duration0_a = '4:00';
+    const duration0_a = '400';
+    const duration_s0_a = '6:40';
 
     const id1_a = 'foo123'
     const title1_a = 'Hurdy Gurdy Man - Butthole Surfers';
-    const duration1_a = '3:22';
+    const duration1_a = '322';
+    const duration_s1_a = '5:22';
 
     const searchResults_a = [
         { id: id0_a, title: title0_a, duration: duration0_a },
@@ -247,8 +253,8 @@ test('stale results ignored', async () => {
     // the older one is ignored
     assert.deepStrictEqual(getIdDataEntries(resultList), [id0_a, id1_a]);
     assert.deepStrictEqual(getTitleAndDurationEntries(resultList), [
-        { title: title0_a, duration: duration0_a },
-        { title: title1_a, duration: duration1_a },
+        { title: title0_a, duration: duration_s0_a },
+        { title: title1_a, duration: duration_s1_a },
     ]);
 });
 
@@ -269,11 +275,13 @@ test('click on autocomplete suggestion', async () => {
 
     const id0 = '0xdeadbeef';
     const title0 = 'Bargain Booze advert';
-    const duration0 = '2:34';
+    const duration0 = '24';
+    const duration_s0 = '0:24';
 
     const id1 = 'abc123'
     const title1 = 'Barry Chuckle tribute';
-    const duration1 = '6:44';
+    const duration1 = '44';
+    const duration_s1 = '0:44';
 
     const searchResults = [
         { id: id0, title: title0, duration: duration0 },
@@ -296,7 +304,7 @@ test('click on autocomplete suggestion', async () => {
     // 3. do the search
     assert.deepStrictEqual(getIdDataEntries(resultList), [id0, id1]);
     assert.deepStrictEqual(getTitleAndDurationEntries(resultList), [
-        { title: title0, duration: duration0 },
-        { title: title1, duration: duration1 },
+        { title: title0, duration: duration_s0 },
+        { title: title1, duration: duration_s1 },
     ]);
 });
