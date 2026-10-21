@@ -35,6 +35,17 @@ class SearchService {
         }).then(response => response.json());
     }
 
+    cancel(id) {
+        // Forward to flask endpoint
+        return fetch('/cancel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id}),
+        }).then(response => response.json());
+    }
+
     pause() {
         // Forward to flask endpoint
         return fetch('/pause', {

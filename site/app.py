@@ -57,6 +57,13 @@ def enqueue():
     q.push_back(video_id, title, channel, duration)
     return {'status': 'ok'}
 
+@app.route('/cancel', methods=['POST'])
+def cancel():
+    data = request.json
+    video_id = data['id']
+    q.cancel(video_id)
+    return {'status': 'ok'}
+
 @app.route('/pause', methods=['POST'])
 def pause():
     pl.pause()

@@ -42,10 +42,13 @@ function makeResultLI(document, r) {
     duration.className = 'results-duration is-size-4';
     duration.textContent = to_duration_string(r.duration);
 
+    const playImg = document.createElement('img');
+    playImg.src = '/static/icons/play-fill.svg';
+
     const play = document.createElement('button');
     play.type = 'button';
-    play.textContent = '\u25B6';
     play.className = 'results-play-button button is-primary';
+    play.append(playImg);
 
     const text = document.createElement('div');
     text.className = 'results-text';
@@ -89,7 +92,15 @@ function makeQueueLI(document, r) {
     text.className = 'queue-text';
     text.append(title, channel);
 
-    item.append(thumb, text, duration);
+    const x = document.createElement('img');
+    x.src = '/static/icons/x.svg';
+
+    const cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.className = 'cancel-button button is-danger';
+    cancel.append(x);
+
+    item.append(thumb, text, duration, cancel);
     return item;
 }
 
@@ -195,6 +206,14 @@ class SearchController {
 
             await service.enqueue(item.dataset.id, item.dataset.title,
                     item.dataset.channel, item.dataset.duration);
+        });
+
+        this.queueList.addEventListener('click', async (event)  => {
+            if (!event.target.closest('.cancel-button')) return;
+            const item = event.target.closest('li');
+            if (!item) return;
+
+            await service.cancel(item.dataset.id);
         });
 
         this.pauseResumeButton.addEventListener('click', (event)  => {

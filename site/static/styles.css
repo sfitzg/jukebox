@@ -61,10 +61,17 @@
     white-space: nowrap;
 }
 
-.results-play-button {
+.results-play-button,
+.cancel-button {
     margin-left: auto;
     cursor: pointer;
+    height: 2.5em;
     padding: 0 0.5rem;
+}
+
+.results-play-button img,
+.cancel-button img {
+    height: 1em;
 }
 
 .queue-panel {
