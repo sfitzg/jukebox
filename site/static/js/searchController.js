@@ -7,6 +7,16 @@ function populateListElement(document, element, strings) {
     }
 }
 
+function to_duration_string(s) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor(s % 3600 / 60);
+    const secs = s % 60;
+
+    if (h) return `${h}:${String(m).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    if (m) return `${m}:${String(secs).padStart(2, '0')}`;
+    return String(secs);
+}
+
 function makeResultLI(document, r) {
     const item = document.createElement('li');
     item.className = 'search-result';
@@ -31,7 +41,7 @@ function makeResultLI(document, r) {
 
     const duration = document.createElement('div');
     duration.className = 'results-duration is-size-4';
-    duration.textContent = r.duration;
+    duration.textContent = to_duration_string(r.duration);
 
     const play = document.createElement('button');
     play.type = 'button';
@@ -74,7 +84,7 @@ function makeQueueLI(document, r) {
 
     const duration = document.createElement('div');
     duration.className = 'queue-duration is-size-4';
-    duration.textContent = r.duration;
+    duration.textContent = to_duration_string(r.duration);
 
     const text = document.createElement('div');
     text.className = 'queue-text';
@@ -120,7 +130,7 @@ class SearchController {
                 this.nowPlayingThumbnail.src = `https://i.ytimg.com/vi/${data.now_playing.video_id}/hqdefault.jpg`;
                 this.nowPlayingTitle.textContent = data.now_playing.title;
                 this.nowPlayingChannel.textContent = data.now_playing.channel;
-                this.nowPlayingDuration.textContent = data.now_playing.duration;
+                this.nowPlayingDuration.textContent = to_duration_string(data.now_playing.duration);
                 this.nowPlayingContainer.hidden = false;
             }
             else {

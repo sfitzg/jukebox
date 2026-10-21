@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import requests
 import json
+import os
+import os
+
+MP3_DURATION_LIMIT = int(os.environ.get('MP3_DURATION_LIMIT', 1200))
 
 def _extract(text, start, end):
     start_pos = text.index(start) + len(start)
@@ -8,16 +12,32 @@ def _extract(text, start, end):
     return text[start_pos:end_pos]
 
 
+def _as_seconds(duration_string):
+    parts = list(map(int, duration_string.split(':')))
+    if len(parts) == 1:
+        return parts[0]
+    if len(parts) == 2:
+        m, s = parts
+        return m * 60 + s
+    if len(parts) == 3:
+        h, m, s = parts
+        return h * 3600 + m * 60 + s
+    return None
+
+
 def _summarize_video(video):
     try:
+        duration = _as_seconds(video['lengthText']['simpleText'])
+
         return {
             'id': video['videoId'],
             'title': video['title']['runs'][0]['text'],
             'channel': video['ownerText']['runs'][0]['text'],
-            'duration': video['lengthText']['simpleText']
-        }
-    except(KeyError, IndexError):
+            'duration': duration,
+        } if duration < MP3_DURATION_LIMIT else None
+    except Exception:
         return None
+
 
 
 def _find_videos(obj):
@@ -44,7 +64,14 @@ def youtube_search(query):
     json_text = _extract(response.text, 'ytInitialData = ', ';</script>')
 
     data = json.loads(json_text)
-    return [_summarize_video(video) for video in _find_videos(data) if video]
+
+    results = []
+
+    for video in _find_videos(data):
+        candidate = _summarize_video(video)
+        if candidate:
+            results.append(candidate)
+    return results
 
 
 if __name__ == '__main__':
