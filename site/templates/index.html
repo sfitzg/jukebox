@@ -49,8 +49,12 @@
                         </div>
                     </div>
                     <div class="buttons">
-                        <button id="pause" class="button is-primary">&#x23EF;</button>
-                        <button id="skip" class="button is-danger">&#x23ED;</button>
+                        <button id="pause" class="button is-primary">
+                            <img src="{{ url_for('static', filename='icons/pause-fill.svg') }}">
+                        </button>
+                        <button id="skip" class="button is-danger">
+                            <img src="{{ url_for('static', filename='icons/skip-forward-fill.svg') }}">
+                        </button>
                         <button id="volume-down" class="button is-primary">
                             <img src="{{ url_for('static', filename='icons/volume-down-fill.svg') }}">
                         </button>

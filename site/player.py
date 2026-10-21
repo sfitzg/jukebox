@@ -34,6 +34,17 @@ class Player:
             self.error = False
             self.done.set()
 
+    def playback_status(self):
+        if self.player:
+            raw_ms_remaining = self.player.get_length() - self.player.get_time()
+            remaining_str = str(max(0, raw_ms_remaining))
+            state = self.player.get_state()
+            if state == vlc.State.Playing:
+                return {'state': 'playing', 'remaining': remaining_str}
+            if state == vlc.State.Paused:
+                return {'state': 'paused', 'remaining': remaining_str}
+            return {'state': '', 'remaining': '0'}
+
     def _on_end(self, event):
         self.error = False
         self.done.set()

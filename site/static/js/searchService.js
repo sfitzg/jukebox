@@ -59,6 +59,11 @@ class SearchService {
         }).then(response => response.json());
     }
 
+    playback_status() {
+        return fetch('/playback-status')
+            .then(response => response.json());
+    }
+
     listen(handler) {
         events.onmessage = (event) => {
             const data = JSON.parse(event.data);

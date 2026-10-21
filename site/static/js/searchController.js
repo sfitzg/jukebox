@@ -13,8 +13,7 @@ function to_duration_string(s) {
     const secs = s % 60;
 
     if (h) return `${h}:${String(m).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    if (m) return `${m}:${String(secs).padStart(2, '0')}`;
-    return String(secs);
+    return `${m}:${String(secs).padStart(2, '0')}`;
 }
 
 function makeResultLI(document, r) {
@@ -116,6 +115,7 @@ class SearchController {
         this.nowPlayingDuration = document.getElementById('now-playing-duration');
 
         this.pauseResumeButton = document.getElementById('pause');
+        this.pauseResumeImage = document.querySelector('#pause img');
         this.skipButton = document.getElementById('skip');
         this.volumeDownButton = document.getElementById('volume-down');
         this.volumeUpButton = document.getElementById('volume-up');
@@ -131,9 +131,29 @@ class SearchController {
                 this.nowPlayingTitle.textContent = data.now_playing.title;
                 this.nowPlayingChannel.textContent = data.now_playing.channel;
                 this.nowPlayingDuration.textContent = to_duration_string(data.now_playing.duration);
-                this.nowPlayingContainer.hidden = false;
+                this.pauseResumeImage.src = '/static/icons/pause-fill.svg';
+
+                if (this.nowPlayingContainer.hidden) {
+                    // Poll pause/playing status and time remaining
+                    this.nowPlayingContainer.dataset.timer = setInterval(async () => {
+                        const data = await service.playback_status();
+                        const remaining = Math.round(data.remaining / 1000);
+                        if (data.state == 'paused') {
+                            this.pauseResumeImage.src = '/static/icons/play-fill.svg';
+                        }
+                        else {
+                            this.pauseResumeImage.src = '/static/icons/pause-fill.svg';
+                        }
+
+                        this.nowPlayingDuration.textContent = to_duration_string(remaining);
+                    }, 200);
+
+                    this.nowPlayingContainer.hidden = false;
+                }
             }
-            else {
+            else if (!this.nowPlayingContainer.hidden) {
+                clearInterval(this.nowPlayingContainer.dataset.timer);
+                this.nowPlayingContainer.dataset.timer = null;
                 this.nowPlayingContainer.hidden = true;
             }
         });

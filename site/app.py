@@ -74,6 +74,10 @@ def volume():
     pl.adjust_volume(int(delta))
     return {'status': 'ok'}
 
+@app.get('/playback-status')
+def playback_status():
+    return pl.playback_status()
+
 @app.get('/events')
 def events():
     def generate():
